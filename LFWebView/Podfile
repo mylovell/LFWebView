@@ -1,0 +1,9 @@
+
+platform :ios, '8.0'
+def pods
+    pod 'YYCache'
+end
+
+target 'LFWebView' do
+    pods
+end

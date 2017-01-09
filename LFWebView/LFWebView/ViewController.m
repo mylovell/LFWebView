@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "Masonry.h"
+#import <JavaScriptCore/JavaScriptCore.h>
 
 @interface ViewController ()<UIWebViewDelegate>
 
@@ -50,15 +51,33 @@
 }
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
     
-    //OC调用JS，给js传值
+    //创建与JS的交互对象
+    JSContext *context = [webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     
-    //JS调用OC，给oc传值
     
-    //获取webView中的内容
+    //1、OC调用JS，给js传值
+    NSString *alertJS=@"alert('test js OC')"; //准备执行的js代码,test js OC就是OC传给JS的值
+    [context evaluateScript:alertJS];//通过oc方法调用js的alert
     
+    
+    
+    //2、JS调用OC，给oc传值
+    context[@"passValue"] = ^{
+        NSArray *arg = [JSContext currentArguments];
+        for (id obj in arg) {
+            NSLog(@"---%@", obj);
+        }
+    };
+    
+    //3、获取webView中的内容
+    NSString *titleString = @"document.title";// 获取当前页面的title
+    NSString *urlString = @"document.location.href";// 获取当前页面的url
+    
+    
+    // 根据字符串webView中的内容
+    NSString *title = [webView stringByEvaluatingJavaScriptFromString:titleString];
     
 }
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{}
 
 
 #pragma mark - 懒加载
