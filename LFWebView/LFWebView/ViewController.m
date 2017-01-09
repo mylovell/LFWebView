@@ -69,12 +69,10 @@
         }
     };
     
+    
     //3、获取webView中的内容
     NSString *titleString = @"document.title";// 获取当前页面的title
     NSString *urlString = @"document.location.href";// 获取当前页面的url
-    
-    
-    // 根据字符串webView中的内容
     NSString *title = [webView stringByEvaluatingJavaScriptFromString:titleString];
     
 }
