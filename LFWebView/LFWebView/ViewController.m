@@ -51,7 +51,7 @@
 }
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
     
-    //创建与JS的交互对象
+    //0、创建与JS的交互对象
     JSContext *context = [webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     
     
@@ -61,13 +61,18 @@
     
     
     
-    //2、JS调用OC，给oc传值
+    //2.1、JS调用OC，给oc传值
     context[@"passValue"] = ^{
         NSArray *arg = [JSContext currentArguments];
         for (id obj in arg) {
             NSLog(@"---%@", obj);
         }
     };
+    
+    
+    
+    //2.2、 JS调用OC
+    
     
     
     //3、获取webView中的内容
