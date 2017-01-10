@@ -44,6 +44,34 @@
 #pragma mark - UIWebViewDelegate
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
     
+    //JS传值给OC
+    
+    //拿到网页的实时url
+    NSString *requestStr = [[request.URL absoluteString] stringByRemovingPercentEncoding];
+    
+    //在url中寻找自定义协议头"objc://"
+    if ([requestStr hasPrefix:@"objc://"]) {
+        
+        // 以"://"为中心将url分割成两部分，放进数组arr
+        NSArray *arr = [requestStr componentsSeparatedByString:@"://"];
+        
+        //取其后半段
+        NSString *paramStr = arr[1];
+        
+        //约定":/"为标识将后半段url分割成若干部分，放进数组arr2，此时arr2[0]为空，arr2[1]为第一个传参值，arr2[2]为第二个传参值，以此类推
+        NSArray *arr2 = [paramStr componentsSeparatedByString:@":/"];
+        
+        //取出参数，进行使用
+        if (arr2.count) {
+            NSLog(@"有参数");
+            //使用参数
+        }else{
+            NSLog(@"无参数");
+        }
+        return NO;
+        
+    }
+    
     return YES;
 }
 - (void)webViewDidStartLoad:(UIWebView *)webView{
@@ -61,17 +89,21 @@
     
     
     
-    //2.1、JS调用OC，给oc传值
+    
+    
+    
+    
+    //2.1、JS调用OC (JS传值给OC)（使用JavaScriptCore.framework框架）
     context[@"passValue"] = ^{
         NSArray *arg = [JSContext currentArguments];
         for (id obj in arg) {
             NSLog(@"---%@", obj);
         }
     };
+    //2.2、 JS传值给OC（使用自定义url方法）
+    // 见shouldStartLoadWithRequest方法
     
     
-    
-    //2.2、 JS调用OC
     
     
     
